@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.6.0'
+}
+
+group 'Allurecombined'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+allure {
+    autoconfigure = false
+    version = '2.7.0'
+    resultsDir = file("${rootProject.rootDir}/build/allure-results")
+    reportDir = file("${rootProject.rootDir}/build/allure-report")
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation 'junit:junit:4.12'
+  //  testCompile 'info.cukes:cucumber-junit:1.0.14'
+  //  compile group: 'io.qameta.allure', name: 'allure-testng', version: '2.0-BETA3'
+  //  testCompile group: 'io.cucumber', name: 'cucumber-testng', version: '2.4.0'
+    //testCompile 'info.cukes:cucumber-java:1.2.4'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.4.0'
+    //compile group: 'com.microsoft.sqlserver', name: 'sqljdbc4', version: '4.0'
+    compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+    compile('com.microsoft.sqlserver:mssql-jdbc')
+   // compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+   // compile 'org.apache.logging.log4j:log4j-core:2.11.1'
+   // compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.1'
+
+
+    testCompile 'io.cucumber:gherkin:5.1.0'
+    testCompile 'io.cucumber:cucumber-core:3.0.2'
+    compile('io.cucumber:cucumber-java:4.3.0')
+    compile('io.cucumber:cucumber-testng:4.3.0')
+    //compile group: 'io.qameta.allure', name: 'allure-testng', version: '2.0-BETA3'
+
+    testCompile 'io.qameta.allure:allure-cucumber3-jvm:2.7.0'
+    testCompile 'org.testng:testng:6.14.3'
+
+    testCompile 'org.assertj:assertj-core:3.11.1'
+
+    //compile 'io.qameta.allure:allure-rest-assured:2.8.1'
+    //testCompile 'io.qameta.allure:allure-gradle:2.3'
+    testCompile group: 'ru.yandex.qatools.allure', name: 'allure-java-aspects', version: '1.4.24.RC3'
+    testCompile group: 'ru.yandex.qatools.allure', name: 'allure-commons', version:  '1.4.24.RC3'
+    testCompile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.1'
+    testCompile 'io.qameta.allure:allure-cucumber3-jvm:2.7.0'
+
+    compile 'io.rest-assured:rest-assured:3.0.0'
+    compile 'org.awaitility:awaitility:3.0.0'
+
+    compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.1'
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.1'
+}
+
+test {
+    useJUnit()
+    useTestNG()
+}
+
+task executeUIFeatures(type: Test) {
+    outputs.upToDateWhen { false }
+    doFirst {
+             useTestNG()
+            options {
+                jvmArgs = ['-DenvironmentName= QA']
+              }
+            testLogging.showStandardStreams = true
+            scanForTestClasses = false
+            ignoreFailures = true
+            reports.html.enabled = false
+    }
+}
+
+wrapper.gradleVersion = '4.10.2'
